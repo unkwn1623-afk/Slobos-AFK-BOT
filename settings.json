@@ -14,8 +14,7 @@
 
   "utils": {
     "auto-auth": {
-      "enabled": false,
-      "password": "password123"
+      "enabled": false
     },
 
     "anti-afk": {
@@ -23,72 +22,10 @@
       "sneak": true
     },
 
-    "auto-reconnect": true,
-    "auto-reconnect-delay": 2000,
-    "max-reconnect-delay": 15000,
-
-    "chat-messages": {
-      "enabled": false,
-      "repeat": false,
-      "repeat-delay": 60,
-      "messages": ["Hello!"]
-    },
-
-    "periodic-rejoin": {
-      "enabled": false
-    }
-  },
-
-  "position": {
-    "enabled": false,
-    "x": 0,
-    "y": 64,
-    "z": 0
+    "auto-reconnect": true
   },
 
   "movement": {
-    "enabled": false,
-    "circle-walk": {
-      "enabled": false,
-      "radius": 5,
-      "speed": 2000
-    },
-    "random-jump": {
-      "enabled": false,
-      "interval": 5000
-    },
-    "look-around": {
-      "enabled": false,
-      "interval": 4000
-    }
-  },
-
-  "modules": {
-    "avoidMobs": false,
-    "combat": false,
-    "beds": false,
-    "chat": false
-  },
-
-  "combat": {
-    "attack-mobs": false,
-    "auto-eat": false
-  },
-
-  "beds": {
-    "place-night": false
-  },
-
-  "chat": {
-    "respond": false
-  },
-
-  "discord": {
-    "enabled": false,
-    "webhookUrl": "YOUR_DISCORD_WEBHOOK_URL",
-    "events": {
-      "connect": true,
-      "disconnect": true
-    }
+    "enabled": false
   }
 }

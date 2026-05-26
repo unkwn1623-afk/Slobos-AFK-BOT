@@ -523,7 +523,7 @@ function initializeModules(bot, mcData, defaultMove) {
   }
 
   // ---------- CHAT MESSAGES ----------
-  if (config.utils['chat-messages'].enabled) {
+  if (config.utils['chat-messages']?.enabled) {
     const messages = config.utils['chat-messages'].messages;
     if (config.utils['chat-messages'].repeat) {
       let i = 0;
@@ -542,7 +542,7 @@ function initializeModules(bot, mcData, defaultMove) {
   }
 
   // ---------- MOVE TO POSITION ----------
-  if (config.position.enabled) {
+  if (config.position?.enabled) {
     bot.pathfinder.setMovements(defaultMove);
     bot.pathfinder.setGoal(new GoalBlock(config.position.x, config.position.y, config.position.z));
   }
@@ -565,21 +565,21 @@ function initializeModules(bot, mcData, defaultMove) {
   }
 
   // ---------- MOVEMENT MODULES ----------
-  if (config.movement['circle-walk'].enabled) {
+  if (config.movement?.['circle-walk']?.enabled) {
     startCircleWalk(bot, defaultMove);
   }
-  if (config.movement['random-jump'].enabled) {
+  if (config.movement?.['random-jump']?.enabled) {
     startRandomJump(bot);
   }
-  if (config.movement['look-around'].enabled) {
+  if (config.movement?.['look-around']?.enabled) {
     startLookAround(bot);
   }
 
   // ---------- CUSTOM MODULES ----------
-  if (config.modules.avoidMobs) avoidMobs(bot);
-  if (config.modules.combat) combatModule(bot, mcData);
-  if (config.modules.beds) bedModule(bot, mcData);
-  if (config.modules.chat) chatModule(bot);
+  if (config.modules?.avoidMobs) avoidMobs(bot);
+  if (config.modules?.combat) combatModule(bot, mcData);
+  if (config.modules?.beds) bedModule(bot, mcData);
+  if (config.modules?.chat) chatModule(bot);
 
   // Periodic Rejoin
   if (config.utils['periodic-rejoin'] && config.utils['periodic-rejoin'].enabled) {
@@ -691,7 +691,7 @@ function combatModule(bot, mcData) {
   addInterval(() => {
     if (!bot || !botState.connected) return;
     try {
-      if (config.combat['attack-mobs']) {
+      if (config.combat?.['attack-mobs']) {
         const mobs = Object.values(bot.entities).filter(e =>
           e.type === 'mob' && e.position &&
           bot.entity.position.distanceTo(e.position) < 4
@@ -706,7 +706,7 @@ function combatModule(bot, mcData) {
   }, 1500);
 
   bot.on('health', () => {
-    if (!config.combat['auto-eat']) return;
+    if (!config.combat?.['auto-eat']) return;
     try {
       if (bot.food < 14) {
         const food = bot.inventory.items().find(i => {
@@ -733,7 +733,7 @@ function bedModule(bot, mcData) {
     try {
       const isNight = bot.time.timeOfDay >= 12500 && bot.time.timeOfDay <= 23500;
 
-      if (config.beds['place-night'] && isNight && !bot.isSleeping) {
+      if (config.beds?.['place-night'] && isNight && !bot.isSleeping) {
         // Find nearby bed blocks
         const bedBlock = bot.findBlock({
           matching: block => block.name.includes('bed'),
@@ -761,7 +761,7 @@ function chatModule(bot) {
     if (!bot || username === bot.username) return;
 
     try {
-      if (config.chat.respond) {
+      if (config.chat?.respond) {
         const lowerMsg = message.toLowerCase();
         if (lowerMsg.includes('hello') || lowerMsg.includes('hi')) {
           bot.chat(`Hello, ${username}!`);
