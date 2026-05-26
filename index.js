@@ -335,7 +335,16 @@ setInterval(() => {
 let bot = null;
 let activeIntervals = [];
 let reconnectTimeout = null;
+let connectionTimeout = null; // module-level so it's cleared on every new bot
 let isReconnecting = false;
+
+// Catch unhandled promise rejections globally so they don't crash the process
+process.on('unhandledRejection', (reason) => {
+  console.log('[WARN] Unhandled promise rejection (ignored):', reason && reason.message ? reason.message : reason);
+});
+process.on('uncaughtException', (err) => {
+  console.log('[WARN] Uncaught exception (ignored):', err.message);
+});
 
 function clearAllIntervals() {
   console.log(`[Cleanup] Clearing ${activeIntervals.length} intervals`);
@@ -367,7 +376,9 @@ function createBot() {
     return;
   }
 
-  // Cleanup previous bot
+  // Cleanup previous bot + cancel any stale connection timeout
+  clearTimeout(connectionTimeout);
+  connectionTimeout = null;
   if (bot) {
     clearAllIntervals();
     try {
@@ -397,7 +408,8 @@ function createBot() {
     bot.loadPlugin(pathfinder);
 
     // Connection timeout - if no spawn in 3 minutes, reconnect
-    const connectionTimeout = setTimeout(() => {
+    connectionTimeout = setTimeout(() => {
+      connectionTimeout = null;
       if (!botState.connected) {
         console.log('[Bot] Connection timeout - no spawn received');
         scheduleReconnect();
