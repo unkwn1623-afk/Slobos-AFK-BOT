@@ -8,7 +8,7 @@
   "server": {
     "ip": "BadriSatwik.aternos.me",
     "port": 55150,
-    "version": "26.1.2"
+    "version": "1.21"
   },
   "position": {
     "enabled": true,
