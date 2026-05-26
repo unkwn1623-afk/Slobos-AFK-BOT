@@ -396,13 +396,13 @@ function createBot() {
 
     bot.loadPlugin(pathfinder);
 
-    // Connection timeout - if no spawn in 60s, reconnect
+    // Connection timeout - if no spawn in 3 minutes, reconnect
     const connectionTimeout = setTimeout(() => {
       if (!botState.connected) {
         console.log('[Bot] Connection timeout - no spawn received');
         scheduleReconnect();
       }
-    }, 60000);
+    }, 180000);
 
     bot.once('spawn', () => {
       clearTimeout(connectionTimeout);
