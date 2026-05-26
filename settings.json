@@ -8,13 +8,13 @@
   "server": {
     "ip": "BadriSatwik.aternos.me",
     "port": 55150,
-    "version": "1.21.1"
+    "version": "26.1.2"
   },
   "position": {
     "enabled": true,
-    "x": 0,
-    "y": 100,
-    "z": 0
+    "x": 100,
+    "y": 95,
+    "z": -100
   },
   "utils": {
     "auto-auth": {
