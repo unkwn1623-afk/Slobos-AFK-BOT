@@ -133,6 +133,11 @@ app.get('/', (req, res) => {
             <div class="value">${config.server.ip}</div>
           </div>
 
+          <div class="stat-card" id="error-card" style="display:none; border-left-color: #f87171;">
+            <div class="label">Last Error</div>
+            <div class="value" id="error-text" style="color:#f87171; font-size:13px; word-break:break-word;"></div>
+          </div>
+
           <a href="/tutorial" class="btn-guide">View Setup Guide</a>
           
           <div class="connection-bar">
@@ -184,6 +189,16 @@ app.get('/', (req, res) => {
                 coordsText.innerText = \`Coords: \${Math.floor(data.coords.x)}, \${Math.floor(data.coords.y)}, \${Math.floor(data.coords.z)}\`;
               } else {
                 coordsText.innerText = 'Unknown Location';
+              }
+
+              // Show last error if any
+              const errorCard = document.getElementById('error-card');
+              const errorText = document.getElementById('error-text');
+              if (data.lastError) {
+                errorCard.style.display = 'block';
+                errorText.innerText = data.lastError;
+              } else {
+                errorCard.style.display = 'none';
               }
 
             } catch (e) {
@@ -257,13 +272,15 @@ app.get('/tutorial', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
+  const lastError = botState.errors.length > 0 ? botState.errors[botState.errors.length - 1] : null;
   res.json({
     status: botState.connected ? 'connected' : 'disconnected',
     uptime: Math.floor((Date.now() - botState.startTime) / 1000),
     coords: (bot && bot.entity) ? bot.entity.position : null,
     lastActivity: botState.lastActivity,
     reconnectAttempts: botState.reconnectAttempts,
-    memoryUsage: process.memoryUsage().heapUsed / 1024 / 1024
+    memoryUsage: process.memoryUsage().heapUsed / 1024 / 1024,
+    lastError: lastError ? lastError.message || lastError.reason || JSON.stringify(lastError) : null
   });
 });
 
