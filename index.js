@@ -493,7 +493,27 @@ function createBot() {
     bot.on('error', (err) => {
       console.log(`[Bot] Error: ${err.message}`);
       botState.errors.push({ type: 'error', message: err.message, time: Date.now() });
-      // Don't immediately reconnect on error - let 'end' event handle it
+
+      // Detect "server offline" errors — don't wait 3 min, reconnect quickly
+      const isServerOffline =
+        err.message.includes("Unsupported protocol version '-1'") ||
+        err.message.includes('ECONNREFUSED') ||
+        err.message.includes('ECONNRESET') ||
+        err.message.includes('ETIMEDOUT') ||
+        err.message.includes('ENOTFOUND');
+
+      if (isServerOffline && !botState.connected) {
+        console.log('[Bot] Server appears offline — will retry in 30s');
+        clearTimeout(reconnectTimeout);
+        if (!isReconnecting) {
+          isReconnecting = true;
+          botState.reconnectAttempts++;
+          reconnectTimeout = setTimeout(() => {
+            isReconnecting = false;
+            createBot();
+          }, 30000);
+        }
+      }
     });
 
   } catch (err) {
