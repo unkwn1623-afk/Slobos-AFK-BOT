@@ -399,7 +399,7 @@ function createBot() {
         sendDiscordWebhook(`[+] **Connected** to \`${config.server.ip}\``, 0x4ade80); // Green
       }
 
-      const mcData = require('minecraft-data')(config.server.version);
+      const mcData = require('minecraft-data')(bot.version);
       const defaultMove = new Movements(bot, mcData);
       defaultMove.allowFreeMotion = false;
       defaultMove.canDig = false;
